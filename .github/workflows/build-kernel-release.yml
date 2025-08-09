@@ -122,7 +122,7 @@ jobs:
           
           while IFS= read -r file; do
             if [ -f "$file" ]; then
-              model=$(basename "$file" .txt)
+              model="RMX3301"
               version=$(cat "$file")
               printf "| %-7s | %-16s |\n" "$model" "$version" >> release_notes.md
             fi
