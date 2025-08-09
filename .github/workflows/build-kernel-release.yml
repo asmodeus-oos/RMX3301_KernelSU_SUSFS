@@ -76,7 +76,7 @@ jobs:
       REPO_OWNER: ${{ github.repository_owner }}
       REPO_NAME: ${{ github.event.repository.name }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      RELEASE_NAME: "*TEST BUILD* OnePlus Kernels With KernelSU Next & SUSFS v1.5.9 *TEST BUILD*"
+      RELEASE_NAME: "RMX3301 Kernels With KernelSU Next & SUSFS v1.5.9"
 
     steps:
       - name: Checkout code
@@ -149,23 +149,31 @@ jobs:
             --repo "${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}" \
             --title "${{ env.RELEASE_NAME }}" \
             --notes-file release_notes.md \
-            --release
+            --prerelease
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload & Rename Release Assets
-  run: |
-    for file in ./downloaded-artifacts/kernel-*/*.zip; do
-      if [[ -f "$file" ]]; then
-        new_file=$(dirname "$file")/$(basename "$file" | sed 's/OP10pro_android12-5.10/RMX3301/')
-        mv "$file" "$new_file"
-        echo "🔄 Renamed to: $(basename "$new_file")"
-        gh release upload ${{ env.NEW_TAG }} "$new_file"
-      fi
-    done
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    NEW_TAG: ${{ env.NEW_TAG }}
+      - name: Upload Release Assets Dynamically
+        run: |
+          for file in ./downloaded-artifacts/kernel-*/*.zip; do
+              if [ -d "$file" ]; then
+                  continue
+              fi
+              # Extract base filename
+              filename=$(basename "$file")
+              
+              # Transform filename: remove model-specific details
+              new_name=$(echo "$filename" | sed 's/OP10pro_android12-5.10_//g')
+              
+              # Final rename: RMX3301 instead of OP10pro
+              new_name="AnyKernel3_RMX3301_${new_name#AnyKernel3_*_}"
+              
+              echo "Uploading $file..."
+              gh release upload ${{ env.NEW_TAG }} "$file" --name "$new_name"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_TAG: ${{ env.NEW_TAG }}
 
       - name: Display Files Uploaded
         run: |
