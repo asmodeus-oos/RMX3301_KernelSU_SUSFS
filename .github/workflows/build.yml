@@ -100,7 +100,7 @@ jobs:
           echo "Using branch for SUSFS: $SUSFS_BRANCH"
           
           # Clone repositories using the branch names
-          https://github.com/asmodeus-oos/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
+          git clone https://github.com/asmodeus-oos/AnyKernel3.git -b "$ANYKERNEL_BRANCH"
           git clone https://gitlab.com/simonpunk/susfs4ksu.git -b "$SUSFS_BRANCH"
           git clone https://github.com/TheWildJames/kernel_patches.git
 
