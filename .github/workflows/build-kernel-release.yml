@@ -154,17 +154,29 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Assets Dynamically
-        run: |
-          for file in ./downloaded-artifacts/kernel-*/*.zip; do
-              if [ -d "$file" ]; then
-                  continue
-              fi
-              echo "Uploading $file..."
-              gh release upload ${{ env.NEW_TAG }} "$file"
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NEW_TAG: ${{ env.NEW_TAG }}
+  run: |
+    for file in ./downloaded-artifacts/kernel-*/*.zip; do
+      if [[ -d "$file" || ! -f "$file" ]]; then
+        continue
+      fi
+
+      # Extract directory and filename
+      dir=$(dirname "$file")
+      filename=$(basename "$file")
+
+      # Replace 'OP10pro_android12-5.10' with 'RMX3301'
+      new_filename="${filename/OP10pro_android12-5.10/RMX3301}"
+      new_path="$dir/$new_filename"
+
+      echo "🔄 Renaming $filename → $new_filename"
+      mv "$file" "$new_path"
+
+      echo "📤 Uploading $new_filename..."
+      gh release upload ${{ env.NEW_TAG }} "$new_path"
+    done
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    NEW_TAG: ${{ env.NEW_TAG }}
 
       - name: Display Files Uploaded
         run: |
