@@ -159,17 +159,8 @@ jobs:
               if [ -d "$file" ]; then
                   continue
               fi
-              # Extract base filename
-              filename=$(basename "$file")
-              
-              # Transform filename: remove model-specific details
-              new_name=$(echo "$filename" | sed 's/OP10pro_android12-5.10_//g')
-              
-              # Final rename: RMX3301 instead of OP10pro
-              new_name="AnyKernel3_RMX3301_${new_name#AnyKernel3_*_}"
-              
               echo "Uploading $file..."
-              gh release upload ${{ env.NEW_TAG }} "$file" --name "$new_name"
+              gh release upload ${{ env.NEW_TAG }} "$file"
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
