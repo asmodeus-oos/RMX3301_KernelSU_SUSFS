@@ -149,7 +149,7 @@ jobs:
             --repo "${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}" \
             --title "${{ env.RELEASE_NAME }}" \
             --notes-file release_notes.md \
-            --prerelease
+            --release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
