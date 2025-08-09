@@ -60,6 +60,9 @@ jobs:
             kernel_version: "5.10"
     runs-on: ubuntu-latest
     steps:
+       steps:
+      - if: ${{ github.event.inputs.device == 'OP10pro' && matrix.model != 'OP10pro' }}
+        run: echo "Skipping non-OP10pro device" && exit 0
       - name: Select Appropriate SusFS Branch
         id: get-susfs-branch
         run: |
