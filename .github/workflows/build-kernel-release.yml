@@ -86,12 +86,12 @@ jobs:
         id: generate-notes
         run: |
           cat << EOF > release_notes.md
-          ## OnePlus 10 Pro Kernel Build
+          ## Kernel Build
           
           This release contains **KernelSU Next** and **SUSFS v1.5.9**
           
           ### Device
-          - Model: OnePlus 10 Pro (OP10pro)
+          - Model:Realme gt 2 pro (Rmx3301)
           - Android: 12
           - Kernel: 5.10
           
